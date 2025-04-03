@@ -32,7 +32,7 @@ def receive():
     while True:
         user, address = server.accept()
         print(f'Connected with {str(address)}')
-        user.send('NICK'.encode(ascii))
+        user.send('NICK'.encode('ascii'))
         username = user.recv(1024).decode('ascii')
         usernames.append(username)
         users.append(user)
