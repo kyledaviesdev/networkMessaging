@@ -1,10 +1,16 @@
 import socket
 import threading
 
-username = input("Chose a username: ")
+username = input("Choose a username: ")
+host_ip = '127.0.0.1'
+port = 52525
 
 user = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-user.connect(('127.0.0.1', 52525))
+try:
+    user.connect((host_ip, port))
+except ConnectionRefusedError:
+    print("Error: Connection refused. Make sure the server is running.")
+    exit()
 
 def receive():
     while True:
@@ -15,14 +21,16 @@ def receive():
             else:
                 print(message)
         except:
-            print("An issue occurred!")
+            print("An error occurred!")
             user.close()
             break
 
 def write():
     while True:
-        message = f'{username}: {input("")}'
+        message = input('')
         user.send(message.encode('ascii'))
+        if message == '/quit':
+            break
 
 receive_thread = threading.Thread(target=receive)
 receive_thread.start()
